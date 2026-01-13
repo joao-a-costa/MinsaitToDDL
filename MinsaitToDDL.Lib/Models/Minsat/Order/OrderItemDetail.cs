@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MinsaitToDDL.Lib.Models.Minsat.Common;
 using System.Xml.Serialization;
 
-namespace MinsaitToDDL.Lib.Models.Minsait
+namespace MinsatToDDL.Lib.Models.Minsat.Order
 {
-    public class InvoiceItemDetail
+    public class OrderItemDetail
     {
         [XmlElement("LineItemNum")]
         public int LineItemNum { get; set; }
@@ -18,7 +17,11 @@ namespace MinsaitToDDL.Lib.Models.Minsait
         [XmlElement("Quantity")]
         public Quantity Quantity { get; set; }
 
-        [XmlElement("MonetaryAmount")]
-        public decimal MonetaryAmount { get; set; }
+        // Estes dois podem não existir em todos os ORDERS
+        [XmlElement("NetPrice")]
+        public decimal? NetPrice { get; set; }
+
+        [XmlElement("NetAmount")]
+        public decimal? NetAmount { get; set; }
     }
 }

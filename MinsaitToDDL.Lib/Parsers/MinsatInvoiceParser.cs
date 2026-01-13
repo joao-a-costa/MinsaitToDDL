@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MinsaitToDDL.Lib.Interfaces;
 using MinsaitToDDL.Lib.Models;
-using MinsaitToDDL.Lib.Models.Minsait;
+using MinsaitToDDL.Lib.Models.Minsat.Invoice;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -89,7 +89,7 @@ namespace MinsaitToDDL.Lib.Parsers
 
         #region Helpers
 
-        private static Models.Party MapParty(Models.Minsait.Party party)
+        private static Models.Party MapParty(MinsaitToDDL.Lib.Models.Minsat.Common.Party party)
         {
             if (party == null) return null;
 
@@ -103,11 +103,11 @@ namespace MinsaitToDDL.Lib.Parsers
             };
         }
 
-        private static Models.Minsait.Party MapPartyReverse(Models.Party party)
+        private static MinsaitToDDL.Lib.Models.Minsat.Common.Party MapPartyReverse(Models.Party party)
         {
             if (party == null) return null;
 
-            return new Models.Minsait.Party
+            return new MinsaitToDDL.Lib.Models.Minsat.Common.Party
             {
                 NIF = party.FederalTaxID,
                 Name = party.OrganizationName,

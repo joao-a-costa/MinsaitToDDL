@@ -1,12 +1,11 @@
-﻿using AutoMapper;
-using MinsaitToDDL.Lib.Interfaces;
-using MinsaitToDDL.Lib.Models;
-using MinsaitToDDL.Lib.Models.Minsait.Order;
-using MinsaitToDDL.Lib.Parsers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using AutoMapper;
+using MinsaitToDDL.Lib.Interfaces;
+using MinsaitToDDL.Lib.Models;
+using MinsatToDDL.Lib.Models.Minsat.Order;
 
 namespace MinsaitToDDL.Lib.Parsers
 {
@@ -66,7 +65,7 @@ namespace MinsaitToDDL.Lib.Parsers
         // Helpers
         // =====================================================
 
-        private static Models.Party MapParty(Models.Minsait.Party party)
+        private static Models.Party MapParty(MinsaitToDDL.Lib.Models.Minsat.Common.Party party)
         {
             if (party == null) return null;
 

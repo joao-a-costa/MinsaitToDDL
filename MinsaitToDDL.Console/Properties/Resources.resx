@@ -5334,7 +5334,7 @@
    "_ISignableTransaction_TransactionID":"FAC A/15211"
 }</value>
   </data>
-  <data name="MinsaitSampleFile1" xml:space="preserve">
+  <data name="MinsaitInvoiceSample" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="windows-1258"?&gt;
 &lt;Invoice xsi:noNamespaceSchemaLocation="file:///D:/CLIENTES/$XSD_GENERICOS/FISI/InvoiceIeDocs.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
  &lt;InvoiceHeader&gt;
@@ -5513,7 +5513,11 @@
 &lt;/Invoice&gt;
 </value>
   </data>
-  <data name="MinsaitSampleFile2Order" xml:space="preserve">
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="MinsaitInvoiveXsd" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\InvoiceIeDocs.xsd;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="MinsaitOrderSample" xml:space="preserve">
     <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;Order xsi:noNamespaceSchemaLocation="file:///C:/XSD_ALTOVA/FISI/OrderIeDocs.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
  &lt;OrderHeader&gt;
@@ -5562,5 +5566,8 @@
  &lt;OrderSummary/&gt;
 &lt;/Order&gt;
 </value>
+  </data>
+  <data name="OrderIeDocs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OrderIeDocs.xsd;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

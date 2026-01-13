@@ -17,7 +17,7 @@ namespace MinsaitToDDL.Lib
             _parsers = new List<IMinsaitDocumentParser>
             {
                 new MinsaitInvoiceParser(),
-                // new MinsaitOrderParser(),
+                new MinsaitOrderParser(),
                 // new MinsaitDesadvParser()
             };
         }

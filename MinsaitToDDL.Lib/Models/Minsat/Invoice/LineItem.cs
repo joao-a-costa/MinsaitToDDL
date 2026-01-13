@@ -1,6 +1,7 @@
-﻿using System.Xml.Serialization;
+﻿using MinsaitToDDL.Lib.Models.Minsat.Common;
+using System.Xml.Serialization;
 
-namespace MinsaitToDDL.Lib.Models.Minsait
+namespace MinsaitToDDL.Lib.Models.Minsat.Invoice
 {
     public class LineItem
     {

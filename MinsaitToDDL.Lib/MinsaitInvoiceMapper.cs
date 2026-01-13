@@ -1,20 +1,22 @@
-﻿using System;
+﻿using AutoMapper;
+using MinsaitToDDL.Lib.Models;
+using MinsaitToDDL.Lib.Models.Minsat.Common;
+using MinsaitToDDL.Lib.Models.Minsat.Invoice;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using AutoMapper;
-using Newtonsoft.Json;
-using MinsaitToDDL.Lib.Models;
-using MinsaitToDDL.Lib.Models.Minsait;
 
 namespace MinsaitToDDL.Lib
 {
     /// <summary>
     /// Class responsible for parsing Minsait documents and mapping them to ItemTransaction objects.
     /// </summary>
-    public class MinsaitToDDL
+    public class MinsaitInvoiceMapper
     {
         #region Enums
 
@@ -140,15 +142,34 @@ namespace MinsaitToDDL.Lib
                 // DDL ➜ Minsait (mínimo viável)
                 // ============================
                 cfg.CreateMap<ItemTransaction, Invoice>()
+                    // ============================
+                    // HEADER
+                    // ============================
                     .ForPath(d => d.InvoiceHeader.InvoiceNumber,
                         o => o.MapFrom(s => s.ISignableTransactionTransactionID))
+
                     .ForPath(d => d.InvoiceHeader.InvoiceDate,
                         o => o.MapFrom(s => s.CreateDate))
+
                     .ForPath(d => d.InvoiceHeader.BuyerInformation,
                         o => o.MapFrom(s => MapPartyReverse(s.Party)))
+
                     .ForPath(d => d.InvoiceHeader.SellerInformation,
                         o => o.MapFrom(s => MapPartyReverse(
                             s.SupplierParty ?? s.Party)))
+
+                    // ============================
+                    // DETAIL (LINES)  ❗ REQUIRED
+                    // ============================
+                    .ForPath(d => d.InvoiceDetail.Items,
+                        o => o.MapFrom(s => MapInvoiceLinesReverse(s.Details)))
+
+                    // ============================
+                    // SUMMARY (TOTALS) ❗ REQUIRED
+                    // ============================
+                    .ForPath(d => d.InvoiceSummary.InvoiceTotals,
+                        o => o.MapFrom(s => MapInvoiceTotalsReverse(s)))
+
                     .ForAllOtherMembers(o => o.Ignore());
             });
         }
@@ -158,7 +179,7 @@ namespace MinsaitToDDL.Lib
 
         #region Helpers
 
-        private static Models.Party MapParty(Models.Minsait.Party party)
+        private static Models.Party MapParty(Models.Minsat.Common.Party party)
         {
             if (party == null) return null;
 
@@ -172,11 +193,11 @@ namespace MinsaitToDDL.Lib
             };
         }
 
-        private static Models.Minsait.Party MapPartyReverse(Models.Party party)
+        private static MinsaitToDDL.Lib.Models.Minsat.Common.Party MapPartyReverse(Models.Party party)
         {
             if (party == null) return null;
 
-            return new Models.Minsait.Party
+            return new MinsaitToDDL.Lib.Models.Minsat.Common.Party
             {
                 NIF = party.FederalTaxID,
                 Name = party.OrganizationName,
@@ -233,56 +254,41 @@ namespace MinsaitToDDL.Lib
             return details;
         }
 
-        //private static List<LineItem> MapInvoiceLinesReverse(IEnumerable<Detail> details)
-        //{
-        //    var lines = new List<LineItem>();
-        //    int lineNo = 1;
+        private static List<InvoiceItemDetail> MapInvoiceLinesReverse(
+            IEnumerable<Detail> details)
+        {
+            var lines = new List<InvoiceItemDetail>();
+            if (details == null)
+                return lines;
 
-        //    if (details == null) return lines;
+            int lineNo = 1;
 
-        //    foreach (var d in details)
-        //    {
-        //        var quantity = (decimal)(d.Quantity ?? 0);
+            foreach (var d in details)
+            {
+                var line = new InvoiceItemDetail
+                {
+                    LineItemNum = lineNo++,
 
-        //        var line = new LineItem
-        //        {
-        //            Number = lineNo++,
-        //            TradeItemIdentification = d.ItemID,
-        //            ItemDescription = d.Description,
+                    // Article
+                    StandardPartNumber = d.ItemID,
+                    ItemDescription = d.Description,
 
-        //            Quantity = new Quantity
-        //            {
-        //                QuantityValue = quantity,
-        //                UnitOfMeasurement = "UN" // ou deixa null se não for obrigatório
-        //            },
+                    // Quantity
+                    Quantity = new Quantity
+                    {
+                        QuantityValue = (decimal)(d.Quantity ?? 0),
+                        UnitOfMeasurement = "UN"
+                    },
 
-        //            NetLineAmount = (decimal)(d.TotalNetAmount ?? 0),
+                    // Net line amount
+                    MonetaryAmount = (decimal)(d.TotalNetAmount ?? 0)
+                };
 
-        //            // cálculo seguro do preço unitário
-        //            NetPrice = quantity != 0
-        //                ? (decimal)((d.TotalNetAmount ?? 0) / (double)quantity)
-        //                : 0
-        //        };
+                lines.Add(line);
+            }
 
-        //        var taxRate = d.TaxList != null
-        //            ? d.TaxList.FirstOrDefault()?.TaxRate
-        //            : null;
-
-        //        if (taxRate.HasValue)
-        //        {
-        //            line.LineVat = new LineVat
-        //            {
-        //                TaxPercentage = (decimal)taxRate.Value,
-        //                TaxableAmount = (decimal)(d.TotalNetAmount ?? 0),
-        //                TaxTotalValue = (decimal)(d.TotalTaxAmount ?? 0)
-        //            };
-        //        }
-
-        //        lines.Add(line);
-        //    }
-
-        //    return lines;
-        //}
+            return lines;
+        }
 
         //private static List<TaxValue> MapTaxValues(IEnumerable<VatSummary> vats)
         //{
@@ -338,6 +344,19 @@ namespace MinsaitToDDL.Lib
 
             return list;
         }
+
+        private static InvoiceTotals MapInvoiceTotalsReverse(ItemTransaction t)
+        {
+            return new InvoiceTotals
+            {
+                //NumberOfLines = t.Details?.Count ?? 0,
+                NetValue = (decimal)(t.TotalAmount ?? 0),
+                //GrossValue = (decimal)(t.TotalTransactionAmount ?? 0),
+                TotalAmountPayable = (decimal)(t.TotalTransactionAmount ?? 0),
+                TotalTaxAmount = (decimal)(t.TotalTaxAmount ?? 0)
+            };
+        }
+
 
 
         #endregion

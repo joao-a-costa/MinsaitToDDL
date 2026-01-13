@@ -23,7 +23,6 @@
     <Compile Remove="Models\Minsait\PaymentTerms.cs" />
     <Compile Remove="Models\Taxis.cs" />
     <Compile Remove="Models\TransactionID.cs" />
-    <Compile Remove="Parsers\MinsatOrderParser.cs" />
   </ItemGroup>
 
   <ItemGroup>

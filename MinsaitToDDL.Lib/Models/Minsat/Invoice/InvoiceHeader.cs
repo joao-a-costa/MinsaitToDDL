@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace MinsaitToDDL.Lib.Models.Minsait
+namespace MinsaitToDDL.Lib.Models.Minsat.Invoice
 {
     public class InvoiceHeader
     {
@@ -19,9 +18,9 @@ namespace MinsaitToDDL.Lib.Models.Minsait
         public OtherInvoiceDates OtherInvoiceDates { get; set; }
 
         [XmlElement("BuyerInformation")]
-        public Party BuyerInformation { get; set; }
+        public Common.Party BuyerInformation { get; set; }
 
         [XmlElement("SellerInformation")]
-        public Party SellerInformation { get; set; }
+        public Common.Party SellerInformation { get; set; }
     }
 }

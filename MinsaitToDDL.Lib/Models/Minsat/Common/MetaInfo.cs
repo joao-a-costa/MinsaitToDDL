@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace MinsaitToDDL.Lib.Models.Minsait
+namespace MinsaitToDDL.Lib.Models.Minsat.Common
 {
     public class MetaInfo
     {

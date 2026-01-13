@@ -120,9 +120,19 @@ namespace MinsaitToDDL.Console.Properties {
         ///  &lt;OtherInvoiceDates&gt;
         ///    [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string MinsaitSampleFile1 {
+        internal static string MinsaitInvoiceSample {
             get {
-                return ResourceManager.GetString("MinsaitSampleFile1", resourceCulture);
+                return ResourceManager.GetString("MinsaitInvoiceSample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] MinsaitInvoiveXsd {
+            get {
+                object obj = ResourceManager.GetObject("MinsaitInvoiveXsd", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -142,9 +152,19 @@ namespace MinsaitToDDL.Console.Properties {
         ///  &lt;/BuyerInformation&gt;
         ///  &lt;Selle [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string MinsaitSampleFile2Order {
+        internal static string MinsaitOrderSample {
             get {
-                return ResourceManager.GetString("MinsaitSampleFile2Order", resourceCulture);
+                return ResourceManager.GetString("MinsaitOrderSample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] OrderIeDocs {
+            get {
+                object obj = ResourceManager.GetObject("OrderIeDocs", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

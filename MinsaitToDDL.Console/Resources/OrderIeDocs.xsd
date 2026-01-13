@@ -1,0 +1,1210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2017 sp1 (x64) (http://www.altova.com) by Ana Paula Belo (Indra Sistemas Portugal) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" id="OrderIeDocs">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">Version 1.00 - iEDocs</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="Order">
+		<xsd:sequence>
+			<xsd:element ref="OrderHeader">
+				<xsd:annotation>
+					<xsd:documentation>Cabecalho</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="OrderDetail">
+				<xsd:annotation>
+					<xsd:documentation>Linhas de detalhe</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="OrderSummary">
+				<xsd:annotation>
+					<xsd:documentation>Resumo</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="Order" type="Order"/>
+	<xsd:complexType name="OrderHeader">
+		<xsd:sequence>
+			<xsd:element name="OrderNumber" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Numero da encomenda do comprador</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OrderDate" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Data da encomenda (YYYY-MM-DDTHH:MM:SS)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OrderTime" type="xsd:time" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Hora da encomenda (HH:MM:SS)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OrderChangeDate" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Data de alteração da encomenda (YYYY-MM-DD)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DocType" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Tipo de Encomenda:
+						220 = Order
+						221 = Blanket order
+						224 = Rush order
+						226 = Call off order
+						22E = Manufacturer raised order (EAN Code)
+						23B = Standing order (EAN Code)
+						50E = Cross docking order (EAN Code)
+						(JM-CD)
+
+						Nota de Devolução:
+						351 - Despatch advice
+
+						Alteração de encomenda:
+						230 – order change request
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OrderType" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Tipo de função do documento:
+						6 = Confirmation
+						7 = Duplicate
+						9 = Original
+						16 = Proposal
+						31 = Copy
+						42 = Confirmation via specific means
+						46 = Provisional
+						(JM-CD)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OrderChangeSequence" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						É utilizado no caso de ser um documento do tipo Order Change.
+						É sequencial e ao nível do pedido. Incrementa sempre que houver uma alteração ao pedido.
+						Deve ser considerado como comulativo e sequencial para efeitos de integração.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OrderReferences" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="OrderRefNumber" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Referencia a encomendas pre-efectuadas</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="DespatchAdviceNotification" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Nº do documento de transporte, no caso deste documento representar uma nota de devolução</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OrderCurrency" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Unidade monetária (ex.: EUR)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OrderSource" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="OtherOrderDates" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DeliveryDate" type="xsd:dateTime" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Data/Hora de entrega (YYYY-MM-DDTHH:MM:SS)</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="LastAcceptableDeliveryDate" type="xsd:dateTime" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Data/Hora limite de entrega (YYYY-MM-DDTHH:MM:SS)</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PickupDate" type="xsd:dateTime" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Data de levantamento (YYYY-MM-DDTHH:MM:SS)</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="BuyerInformation" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao relativa ao comprador</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="EANCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo EAN</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="InternalCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo interno</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Name" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Nome</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Street" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Morada</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="City" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Cidade</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PostalCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo postal (0000-000)</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Country" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Pais</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Department" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Departamento/Secção interna do comprador</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="SellingDepartment" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Sucursal de destino do comprador</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Nif" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Nif do comprador</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="CapSoc" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Nif do comprador</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="NRCC" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Nif do comprador</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Phone" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="Fax" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="Email" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="Language" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Pais Lingua</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SellerInformation">
+				<xsd:annotation>
+					<xsd:documentation>Informacao relativa ao fornecedor</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="EANCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo EAN</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="InternalCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo interno</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Name" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Nome</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Street" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Morada</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="City" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Cidade</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PostalCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo postal (0000-000)</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Country" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Pais</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Department" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Departamento de venda</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Nif" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Nif do vendedor</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Phone" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="Fax" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="Email" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="Language" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Pais Lingua</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="DeliveryPlaceInformation" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao relativa ao local de entrega</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="EANCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo EAN</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="InternalCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo interno</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Name" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Nome</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Street" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Morada</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="City" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Cidade</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PostalCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo postal (0000-000)</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Country" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Pais</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Department" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Departamento</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Phone" type="xsd:string" minOccurs="0"/>
+						<xsd:element name="PortOfDischarge" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Cais de descarga</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="BillToPartyInformation" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao relativa a entidade facturada</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="EANCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo EAN</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Name" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Nome</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Street" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Morada</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="City" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Cidade</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PostalCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo postal</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Country" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Pais</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Language" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Pais Lingua</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PaymentInstructions" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Instrucoes de pagamento</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PaymentMethod" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Forma de pagamento</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PaymentDate" type="xsd:dateTime" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Data de pagamento (YYYY-MM-DDTHH:MM:SS)</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PaymentTerm" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Numero de dias</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="DeliveryConditions" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Condicoes de entrega</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ShipFromParty" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao relativa ao local de carga da mercadoria</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="EANCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo EAN</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Name" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Nome</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Street" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Morada</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="City" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Cidade</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PostalCode" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo postal (0000-000)</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Country" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Pais</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Phone" type="xsd:string" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="TransportInformation" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao relativa ao transporte</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TypeOfTransport" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Tipo de transporte</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="TransportID" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Identificacao do transporte (matricula)</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="InvoiceAllowancesOrCharges" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao dos descontos</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence maxOccurs="unbounded">
+						<xsd:element name="InvoiceAllowanceOrCharge" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Code" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Codigo do desconto</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Percent" type="xsd:decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Percentagem de desconto</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="MonetaryAmount" type="xsd:decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Montante de desconto</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="HeaderTaxes" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao das taxas</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="HeaderTaxesHeader" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="TaxType" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Tipo de taxa (IVA , IEC, DireitosAutor, EcoPilhas, EcoREEE, PontoVerde, EcoLub, EcoValor)</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TaxPercent" type="xsd:decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Percentagem</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TaxableAmount" type="xsd:decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Montante sujeito a taxa</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TaxAmount" type="xsd:decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Montante de imposto</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TaxFreeText" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Texto livre</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SpecialConditions" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Condicoes especiais</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Conditions" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>Condicao</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="HeaderFreeText" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Texto livre de cabecalho</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence maxOccurs="3">
+						<xsd:element name="Text" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Texto</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FreeTexts" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="FreeText" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Qualf" type="xsd:string" minOccurs="0"/>
+									<xsd:element name="SubQualf" type="xsd:string" minOccurs="0"/>
+									<xsd:element name="Text" type="xsd:string" minOccurs="0"/>
+									<xsd:element name="TextSize" type="xsd:int" minOccurs="0"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="UserName" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Nome do utilizador que submete a encomenda
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Transmission" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao do transporte</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TransDate" type="xsd:dateTime" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Data Processamento</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="TransNum" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Numero Processamento</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="InSystemDate" type="xsd:dateTime" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Data do Sistema</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Sender" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>GLN do Emissor</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Recipient" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>GLN do Receptor</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="AuxProc" minOccurs="0" maxOccurs="1">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="ProcType" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>
+									E- Envia email Emissor
+									R - Envia Email Recetor
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="ProcTypeFile" type="xsd:boolean" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>
+									Exporta ficheiro de entrada com GLN's indicados nas tags GLN{Emissor,Recetor}
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="ProcTypeStatusAT" type="xsd:boolean" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>
+									Exporta ficheiro de status com GLN's indicados nas tags GLN{Emissor,Recetor}
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="GLNEmissor" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>GLN Emissor - Nome Ficheiro</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="GLNRecetor" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>GLN Recetor - Nome Ficheiro</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Copy" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Indica se Ã© criado o duplicado dos PDF's</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="TemplateColor" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Permite passar código de cor para os templates criados</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="TemplateLogo" type="xsd:boolean" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Indica se o PDF deverá reservar espaço para o logótipo</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Subject" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Assunto do email</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="OrderHeader" type="OrderHeader"/>
+	<xsd:complexType name="OrderDetail">
+		<xsd:sequence>
+			<xsd:element ref="ItemDetail" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="OrderDetail" type="OrderDetail"/>
+	<xsd:complexType name="ListOfItemDetail">
+		<xsd:sequence/>
+	</xsd:complexType>
+	<xsd:element name="ListOfItemDetail" type="ListOfItemDetail"/>
+	<xsd:complexType name="ItemDetail">
+		<xsd:sequence>
+			<xsd:element name="ItemDetailChangeCoded" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Utilizado no documento Order Change, pode ter os seguintes valores:
+						1 – Nova linha
+						2 – Linha com alterações
+						3 – Linha apagada
+						0 – Linha sem alterações
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LineItemNum" type="xsd:int" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Numero da linha</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="StandardPartNumber" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Codigo EAN do artigo</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="BuyerPartNumber" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Codigo artigo do comprador</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SellerPartNumber" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Codigo artigo do fornecedor</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SerialNumber" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Codigo artigo do fornecedor</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ItemDescriptions" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Descricao do artigo</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Description" type="xsd:string" minOccurs="0" maxOccurs="6">
+							<xsd:annotation>
+								<xsd:documentation>Descicao</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Quantity" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao da quantidade</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="QuantityValue" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Quantidade</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="UnitOfMeasurement" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Unidade de medida</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="BonusQuantity" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao quantidade de bonus</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="QuantityValue" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Quantidade</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="UnitOfMeasurement" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Unidade de medida</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PackSize" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao do Pack Size (unidades por caixa)</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Quantity" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Quantidade</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="UnitOfMeasurement" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Unidade de medida</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Price" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao dos precos</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="NetPrice" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Preco liquido</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="GrossPrice" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Preco bruto</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PVP" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Preco de venda recomendado</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PriceBasisQuantity" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Base do preco</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="UnitOfMeasurement" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Unidade de medida</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="LineDeliveryInformation" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao de entrega</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DeliveryPlaceDetail" minOccurs="0" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>Detalhe por cada local de entrega</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="EANCode" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Codigo EAN do local de entrega</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="InternalCode" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Codigo interno do local de entrega</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="PlaceOfConsumptionEANCode" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Codigo EAN do ponto de consumo final</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="PlaceOfConsumptionInternalCode" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Codigo interno do ponto de consumo final</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="DeliveryDate" type="xsd:dateTime" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Data de entrega (YYYY-MM-DDTHH:MM:SS)</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="ASNItemNum" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Número da linha da guia da loja</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="DeliveryPlaceDetailQuantity" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Informacao da quantidade pedida pela loja</xsd:documentation>
+										</xsd:annotation>
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="QuantityValue" type="xsd:decimal" minOccurs="0">
+													<xsd:annotation>
+														<xsd:documentation>Quantidade</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="UnitOfMeasurement" type="xsd:string" minOccurs="0">
+													<xsd:annotation>
+														<xsd:documentation>Unidade de medida</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="ASNNumber" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Número da guia da loja</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="LocationID" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Identificação do espaço físico do armazém do comprador</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="DeliveryPlaceDetailPackage" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Informacao das embalagens do pedido da loja</xsd:documentation>
+										</xsd:annotation>
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="PackageIdentifier" type="xsd:string" minOccurs="0">
+													<xsd:annotation>
+														<xsd:documentation>Codigo da embalagem</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="Quantity" type="xsd:decimal" minOccurs="0">
+													<xsd:annotation>
+														<xsd:documentation>Quantidade de embalagens</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="UnitOfMeasurement" type="xsd:string" minOccurs="0">
+													<xsd:annotation>
+														<xsd:documentation>Unidade de medida</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="PackageType" type="xsd:string" minOccurs="0">
+													<xsd:annotation>
+														<xsd:documentation>Tipo de embalagem</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="UnitConversion" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Conversão de Unidades</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Unit1" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Quantidade Unidade 1</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="UnitOfMeasurement1" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Medida das Unidades</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Unit2" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Quantidade Unidade2</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="UnitOfMeasurement2" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Medida das Unidades</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="MonetaryAmount" type="xsd:decimal" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Montante liquido da linha</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Package" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao das embalagens</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PackageIdentifier" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Codigo da embalagem</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Quantity" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Quantidade de embalagens</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="UnitOfMeasurement" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Unidade de medida</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PackageType" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Tipo de embalagem</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Levels" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nivel</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Ballast" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Lastro</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LineAllowancesOrCharges" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao dos descontos</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="LineAllowanceOrCharge" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Seq" minOccurs="0">
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:int"/>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="Code" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Codigo</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Percent" type="xsd:decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Percentagem</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="MonetaryAmount" type="xsd:decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Montante</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Quantity" type="xsd:decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Desconto em unidades</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="LineTaxes" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Informacao das taxas</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Tax" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="TaxType" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Tipo de taxa (IVA , IEC, DireitosAutor, EcoPilhas, EcoREEE, PontoVerde, EcoLub, EcoValor)</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TaxPercent" type="xsd:decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Percentagem</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TaxableAmount" type="xsd:decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Montante sujeito a taxa</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TaxAmount" type="xsd:decimal" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Montante</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="TaxFreeText" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Texto livre</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="LineFreeText" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Texto livre</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence maxOccurs="3">
+						<xsd:element name="Text" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Texto</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="LineFreeTexts" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Textos Livre</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="LineFreeTextItem" minOccurs="0" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>Texto Livre</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Qualf" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Qualificador do Texto</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Text" type="xsd:string" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Texto</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="LineTotalDiscount" type="xsd:decimal" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Montante total desconto da linha</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GrossMonetaryAmount" type="xsd:decimal" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Montante Bruto da linha</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="ItemDetail" type="ItemDetail"/>
+	<xsd:complexType name="OrderSummary">
+		<xsd:sequence>
+			<xsd:element name="NumberOfLines" type="xsd:int" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Numero total de linhas</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TotalQuantityOfGoods" type="xsd:decimal" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Quantidade de artigos total</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OrderTotals" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Montantes totais</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="NetValue" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Valor liquido</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="GrossValue" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Valor bruto</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="TotalAmountPayable" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Montante tributavel</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Insurance" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Seguros</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Transports" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Transportes</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Rate" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Conversão</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="TotalTaxValue" type="xsd:decimal" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Montante total IVA</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="TotalDiscountDescription" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Descrição dos descontos globais</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="OrderSummary" type="OrderSummary"/>
+</xsd:schema>

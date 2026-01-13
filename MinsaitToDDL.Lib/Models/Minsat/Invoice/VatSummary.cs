@@ -1,8 +1,8 @@
 ﻿using System.Xml.Serialization;
 
-namespace MinsaitToDDL.Lib.Models.Minsait
+namespace MinsaitToDDL.Lib.Models.Minsat.Invoice
 {
-    public class LineVat
+    public class VatSummary
     {
         [XmlElement("TaxPercentage")]
         public decimal TaxPercentage { get; set; }
