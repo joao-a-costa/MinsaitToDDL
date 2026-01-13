@@ -1,13 +1,13 @@
-# Minsat to DDL
+# Minsait to DDL
 
-[![NuGet Version](https://img.shields.io/nuget/v/MinsatToDDL.Lib.svg)](https://www.nuget.org/packages/MinsatToDDL.Lib/)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/MinsatToDDL.Lib.svg)](https://www.nuget.org/packages/MinsatToDDL.Lib/)
+[![NuGet Version](https://img.shields.io/nuget/v/MinsaitToDDL.Lib.svg)](https://www.nuget.org/packages/MinsaitToDDL.Lib/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/MinsaitToDDL.Lib.svg)](https://www.nuget.org/packages/MinsaitToDDL.Lib/)
 
-The Minsat to DDL  is a .NET library for parsing Minsat invoices from XML format and converting them into accounting domain-driven objects, with the ability to serialize them into JSON format. This library offers a seamless solution for developers needing to integrate Minsat invoice parsing and conversion functionalities into their .NET applications.
+The Minsait to DDL  is a .NET library for parsing Minsait invoices from XML format and converting them into accounting domain-driven objects, with the ability to serialize them into JSON format. This library offers a seamless solution for developers needing to integrate Minsait invoice parsing and conversion functionalities into their .NET applications.
 
 ## Features
 
-- **Effortless XML Parsing**: Easily parse Minsat invoices contained within XML files and map them to accounting domain-driven objects.
+- **Effortless XML Parsing**: Easily parse Minsait invoices contained within XML files and map them to accounting domain-driven objects.
   
 - **Flexible Serialization**: Serialize accounting domain-driven objects into JSON format, providing flexibility in data interchange and storage.
 
@@ -18,7 +18,7 @@ The Minsat to DDL  is a .NET library for parsing Minsat invoices from XML format
 Install the package via NuGet Package Manager Console:
 
 ```bash
-Install-Package MinsatToDDL
+Install-Package MinsaitToDDL
 ```
 
 ## Usage
@@ -28,8 +28,8 @@ Install-Package MinsatToDDL
     ```csharp
     using Newtonsoft.Json;
 
-    // Parse Minsat invoice XML file and map it to an ItemTransaction object
-    var itemTransaction = MinsatToDDL.Lib.MinsatToDDL.Parse(MinsatToDDL.Console.Properties.Resources.MinsatSampleFile);
+    // Parse Minsait invoice XML file and map it to an ItemTransaction object
+    var itemTransaction = MinsaitToDDL.Lib.MinsaitToDDL.Parse(MinsaitToDDL.Console.Properties.Resources.MinsaitSampleFile);
     
     // Define JSON serialization options
     var serializeOptions = new JsonSerializerSettings
@@ -64,4 +64,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Feel free to explore and extend the functionality of MinsatToDDL for your WinForms applications! If you encounter any issues or have suggestions, please open an issue on the [GitHub repository](https://github.com/joao-a-costa/MinsatToDDL/issues).
+Feel free to explore and extend the functionality of MinsaitToDDL for your WinForms applications! If you encounter any issues or have suggestions, please open an issue on the [GitHub repository](https://github.com/joao-a-costa/MinsaitToDDL/issues).
