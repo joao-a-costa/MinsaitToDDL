@@ -1,13 +1,13 @@
-# Saphety to DDL
+# Minsat to DDL
 
-[![NuGet Version](https://img.shields.io/nuget/v/SaphetyToDDL.Lib.svg)](https://www.nuget.org/packages/SaphetyToDDL.Lib/)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/SaphetyToDDL.Lib.svg)](https://www.nuget.org/packages/SaphetyToDDL.Lib/)
+[![NuGet Version](https://img.shields.io/nuget/v/MinsatToDDL.Lib.svg)](https://www.nuget.org/packages/MinsatToDDL.Lib/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/MinsatToDDL.Lib.svg)](https://www.nuget.org/packages/MinsatToDDL.Lib/)
 
-The Saphety to DDL  is a .NET library for parsing Saphety invoices from XML format and converting them into accounting domain-driven objects, with the ability to serialize them into JSON format. This library offers a seamless solution for developers needing to integrate Saphety invoice parsing and conversion functionalities into their .NET applications.
+The Minsat to DDL  is a .NET library for parsing Minsat invoices from XML format and converting them into accounting domain-driven objects, with the ability to serialize them into JSON format. This library offers a seamless solution for developers needing to integrate Minsat invoice parsing and conversion functionalities into their .NET applications.
 
 ## Features
 
-- **Effortless XML Parsing**: Easily parse Saphety invoices contained within XML files and map them to accounting domain-driven objects.
+- **Effortless XML Parsing**: Easily parse Minsat invoices contained within XML files and map them to accounting domain-driven objects.
   
 - **Flexible Serialization**: Serialize accounting domain-driven objects into JSON format, providing flexibility in data interchange and storage.
 
@@ -18,7 +18,7 @@ The Saphety to DDL  is a .NET library for parsing Saphety invoices from XML form
 Install the package via NuGet Package Manager Console:
 
 ```bash
-Install-Package SaphetyToDDL
+Install-Package MinsatToDDL
 ```
 
 ## Usage
@@ -28,8 +28,8 @@ Install-Package SaphetyToDDL
     ```csharp
     using Newtonsoft.Json;
 
-    // Parse Saphety invoice XML file and map it to an ItemTransaction object
-    var itemTransaction = SaphetyToDDL.Lib.SaphetyToDDL.Parse(SaphetyToDDL.Console.Properties.Resources.SaphetySampleFile);
+    // Parse Minsat invoice XML file and map it to an ItemTransaction object
+    var itemTransaction = MinsatToDDL.Lib.MinsatToDDL.Parse(MinsatToDDL.Console.Properties.Resources.MinsatSampleFile);
     
     // Define JSON serialization options
     var serializeOptions = new JsonSerializerSettings
@@ -64,4 +64,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Feel free to explore and extend the functionality of SaphetyToDDL for your WinForms applications! If you encounter any issues or have suggestions, please open an issue on the [GitHub repository](https://github.com/joao-a-costa/SaphetyToDDL/issues).
+Feel free to explore and extend the functionality of MinsatToDDL for your WinForms applications! If you encounter any issues or have suggestions, please open an issue on the [GitHub repository](https://github.com/joao-a-costa/MinsatToDDL/issues).
