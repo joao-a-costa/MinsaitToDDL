@@ -31,56 +31,52 @@ namespace MinsaitToDDL.Lib.Parsers
             return mapper.Map<ItemTransaction>(document);
         }
 
+        public string ParseFromDdl(ItemTransaction transaction)
+        {
+            var mapper = CreateMapper();
+            var document = mapper.Map<Invoice>(transaction);
+
+            var serializer = new XmlSerializer(typeof(Invoice));
+            using (var writer = new StringWriter())
+            {
+                serializer.Serialize(writer, document);
+                return writer.ToString();
+            }
+        }
+
         private static IMapper CreateMapper()
         {
             var config = new MapperConfiguration(cfg =>
             {
-                // ============================
-                // Minsait ➜ DDL
-                // ============================
                 cfg.CreateMap<Invoice, ItemTransaction>()
-                    .ForMember(d => d.CreateDate,
-                        o => o.MapFrom(s => s.InvoiceHeader.InvoiceDate))
-                    .ForMember(d => d.DeferredPaymentDate,
-                        o => o.MapFrom(s =>
-                            s.InvoiceHeader.OtherInvoiceDates != null
-                                ? s.InvoiceHeader.OtherInvoiceDates.InvoiceDueDate
-                                : (DateTime?)null))
-                    .ForMember(d => d.ISignableTransactionTransactionID,
-                        o => o.MapFrom(s => s.InvoiceHeader.InvoiceNumber))
-                    .ForMember(d => d.TotalAmount,
-                        o => o.MapFrom(s => s.InvoiceSummary.InvoiceTotals.NetValue))
-                    .ForMember(d => d.TotalTaxAmount,
-                        o => o.MapFrom(s => s.InvoiceSummary.InvoiceTotals.TotalTaxAmount))
-                    .ForMember(d => d.TotalTransactionAmount,
-                        o => o.MapFrom(s => s.InvoiceSummary.InvoiceTotals.TotalAmountPayable))
-                    .ForPath(d => d.Party,
-                        o => o.MapFrom(s => MapParty(s.InvoiceHeader.BuyerInformation)))
-                    .ForPath(d => d.SupplierParty,
-                        o => o.MapFrom(s => MapParty(s.InvoiceHeader.SellerInformation)))
-                    .ForPath(d => d.Details,
-                        o => o.MapFrom(s => MapInvoiceLines(
-                            s.InvoiceDetail != null
-                                ? s.InvoiceDetail.Items
-                                : null)))
-                    .ForPath(d => d.Taxes,
-                        o => o.MapFrom(s => MapSummaryTaxes(
-                            s.InvoiceSummary.SummaryTaxes)))
-                    .ForAllOtherMembers(o => o.Ignore());
+                .ForMember(d => d.CreateDate,
+                    o => o.MapFrom(s => s.InvoiceHeader.InvoiceDate))
+                .ForMember(d => d.DeferredPaymentDate,
+                    o => o.MapFrom(s =>
+                        s.InvoiceHeader.OtherInvoiceDates != null
+                            ? s.InvoiceHeader.OtherInvoiceDates.InvoiceDueDate
+                            : (DateTime?)null))
+                .ForMember(d => d.ISignableTransactionTransactionID,
+                    o => o.MapFrom(s => s.InvoiceHeader.InvoiceNumber))
+                .ForMember(d => d.TotalAmount,
+                    o => o.MapFrom(s => s.InvoiceSummary.InvoiceTotals.NetValue))
+                .ForMember(d => d.TotalTaxAmount,
+                    o => o.MapFrom(s => s.InvoiceSummary.InvoiceTotals.TotalTaxAmount))
+                .ForMember(d => d.TotalTransactionAmount,
+                    o => o.MapFrom(s => s.InvoiceSummary.InvoiceTotals.TotalAmountPayable))
+                .ForPath(d => d.Party,
+                    o => o.MapFrom(s => MapParty(s.InvoiceHeader.BuyerInformation)))
+                .ForPath(d => d.SupplierParty,
+                    o => o.MapFrom(s => MapParty(s.InvoiceHeader.SellerInformation)))
+                .ForPath(d => d.Details,
+                    o => o.MapFrom(s => MapInvoiceLines(
+                        s.InvoiceDetail != null ? s.InvoiceDetail.Items : null)))
+                .ForPath(d => d.Taxes,
+                    o => o.MapFrom(s => MapSummaryTaxes(
+                        s.InvoiceSummary.SummaryTaxes)))
+                .ForAllOtherMembers(o => o.Ignore());
 
-                // ============================
-                // DDL ➜ Minsait (mínimo viável)
-                // ============================
                 cfg.CreateMap<ItemTransaction, Invoice>()
-                    .ForPath(d => d.InvoiceHeader.InvoiceNumber,
-                        o => o.MapFrom(s => s.ISignableTransactionTransactionID))
-                    .ForPath(d => d.InvoiceHeader.InvoiceDate,
-                        o => o.MapFrom(s => s.CreateDate))
-                    .ForPath(d => d.InvoiceHeader.BuyerInformation,
-                        o => o.MapFrom(s => MapPartyReverse(s.Party)))
-                    .ForPath(d => d.InvoiceHeader.SellerInformation,
-                        o => o.MapFrom(s => MapPartyReverse(
-                            s.SupplierParty ?? s.Party)))
                     .ForAllOtherMembers(o => o.Ignore());
             });
 
@@ -89,7 +85,7 @@ namespace MinsaitToDDL.Lib.Parsers
 
         #region Helpers
 
-        private static Models.Party MapParty(MinsaitToDDL.Lib.Models.Minsat.Common.Party party)
+        private static Party MapParty(Models.Minsat.Common.Party party)
         {
             if (party == null) return null;
 
@@ -103,19 +99,19 @@ namespace MinsaitToDDL.Lib.Parsers
             };
         }
 
-        private static MinsaitToDDL.Lib.Models.Minsat.Common.Party MapPartyReverse(Models.Party party)
-        {
-            if (party == null) return null;
+        //private static Party MapPartyReverse(Models.Party party)
+        //{
+        //    if (party == null) return null;
 
-            return new MinsaitToDDL.Lib.Models.Minsat.Common.Party
-            {
-                NIF = party.FederalTaxID,
-                Name = party.OrganizationName,
-                Street = party.AddressLine1,
-                PostalCode = party.PostalCode,
-                Country = party.CountryID
-            };
-        }
+        //    return new MinsaitToDDL.Lib.Models.Minsat.Common.Party
+        //    {
+        //        NIF = party.FederalTaxID,
+        //        Name = party.OrganizationName,
+        //        Street = party.AddressLine1,
+        //        PostalCode = party.PostalCode,
+        //        Country = party.CountryID
+        //    };
+        //}
 
         //private static UnloadPlaceAddress MapUnloadPlaceAddress(Models.Minsait.Party party)
         //{

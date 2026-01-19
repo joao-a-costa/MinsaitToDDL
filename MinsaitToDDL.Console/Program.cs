@@ -10,7 +10,7 @@ namespace MinsaitToDDL.Console
         static void Main(string[] args)
         {
             var minsaitParser = new MinsaitParser();
-            var reverseParser = new MinsaitReverseParser();
+            //var reverseParser = new MinsaitReverseParser();
 
             var serializeOptions = new JsonSerializerSettings
             {
@@ -22,11 +22,13 @@ namespace MinsaitToDDL.Console
                 System.Console.Clear();
                 System.Console.WriteLine("=== Minsait / DDL Conversion Console ===");
                 System.Console.WriteLine("Select an option:");
-                System.Console.WriteLine("1) Parse Minsait INVOICE XML ➜ DDL");
-                System.Console.WriteLine("2) Parse Minsait ORDER XML ➜ DDL");
-                System.Console.WriteLine("3) Parse DDL (from INVOICE sample) ➜ XML + XSD validation");
-                System.Console.WriteLine("4) Parse DDL (from ORDER sample) ➜ XML + XSD validation");
-                System.Console.WriteLine("5) Parse DDL JSON string ➜ XML + XSD validation");
+                System.Console.WriteLine("1) Parse Minsait INVOICE XML -> DDL");
+                System.Console.WriteLine("2) Parse Minsait ORDER XML -> DDL");
+                System.Console.WriteLine("3) Parse DDL (from INVOICE sample) -> XML + XSD validation");
+                System.Console.WriteLine("4) Parse DDL (from ORDER sample) -> XML + XSD validation");
+                //System.Console.WriteLine("5) Parse DDL JSON string -> XML + XSD validation");
+                System.Console.WriteLine("6) Parse REAL Minsait ORDER sample -> DDL -> XML + XSD");
+                //System.Console.WriteLine("7) Load XML from file -> DDL -> XML + XSD");
                 System.Console.WriteLine("0) Exit");
                 System.Console.Write("> ");
 
@@ -52,21 +54,30 @@ namespace MinsaitToDDL.Console
                     case "3":
                         ProcessDdlFromMinsaitSample(
                             minsaitParser,
-                            reverseParser,
+                            //reverseParser,
                             Properties.Resources.MinsaitInvoiceSample,
-                            serializeOptions);
+                            serializeOptions, Lib.Enums.Enums.DocumentType.INVOICE);
                         break;
 
                     case "4":
                         ProcessDdlFromMinsaitSample(
                             minsaitParser,
-                            reverseParser,
+                            //reverseParser,
                             Properties.Resources.MinsaitOrderSample,
-                            serializeOptions);
+                            serializeOptions, Lib.Enums.Enums.DocumentType.ORDER);
                         break;
 
-                    case "5":
-                        ProcessDdlFromString(reverseParser);
+                    //case "5":
+                    //    //ProcessDdlFromString(reverseParser);
+                    //    ProcessDdlFromString();
+                    //    break;
+
+                    case "6":
+                        ProcessDdlFromMinsaitSample(
+                            minsaitParser,
+                            //reverseParser,
+                            Properties.Resources.MinsaitOrderSampleReal,
+                            serializeOptions, Lib.Enums.Enums.DocumentType.ORDER);
                         break;
 
                     case "0":
@@ -86,7 +97,7 @@ namespace MinsaitToDDL.Console
             string xmlSample,
             JsonSerializerSettings serializeOptions)
         {
-            System.Console.WriteLine("\n=== Parsing Minsait XML ➜ DDL ===");
+            System.Console.WriteLine("\n=== Parsing Minsait XML -> DDL ===");
 
             var itemTransaction = minsaitParser.Parse(xmlSample);
 
@@ -104,11 +115,12 @@ namespace MinsaitToDDL.Console
 
         static void ProcessDdlFromMinsaitSample(
             MinsaitParser minsaitParser,
-            MinsaitReverseParser reverseParser,
+            //MinsaitReverseParser reverseParser,
             string xmlSample,
-            JsonSerializerSettings serializeOptions)
+            JsonSerializerSettings serializeOptions,
+            Lib.Enums.Enums.DocumentType documentType)
         {
-            System.Console.WriteLine("\n=== Parsing Minsait XML ➜ DDL ➜ XML ===");
+            System.Console.WriteLine("\n=== Parsing Minsait XML -> DDL -> XML ===");
 
             var itemTransaction = minsaitParser.Parse(xmlSample);
 
@@ -122,31 +134,35 @@ namespace MinsaitToDDL.Console
 
             var ddlObject = JsonConvert.DeserializeObject<ItemTransaction>(ddlJson);
 
-            GenerateXmlAndValidate(reverseParser, ddlObject);
+            //GenerateXmlAndValidate(reverseParser, ddlObject);
+            GenerateXmlAndValidate(minsaitParser, ddlObject, documentType);
         }
 
-        static void ProcessDdlFromString(
-            MinsaitReverseParser reverseParser)
-        {
-            System.Console.WriteLine("\n=== Parsing DDL JSON String ➜ XML ===");
+        //static void ProcessDdlFromString(
+        //    //MinsaitReverseParser reverseParser
+        //)
+        //{
+        //    System.Console.WriteLine("\n=== Parsing DDL JSON String -> XML ===");
 
-            var ddlJsonString = Properties.Resources.dllSampleString2;
+        //    var ddlJsonString = Properties.Resources.dllSampleString2;
 
-            System.Console.WriteLine("\n--- Loaded DDL JSON ---");
-            System.Console.WriteLine(ddlJsonString);
+        //    System.Console.WriteLine("\n--- Loaded DDL JSON ---");
+        //    System.Console.WriteLine(ddlJsonString);
 
-            var ddlObject = JsonConvert.DeserializeObject<ItemTransaction>(ddlJsonString);
+        //    var ddlObject = JsonConvert.DeserializeObject<ItemTransaction>(ddlJsonString);
 
-            GenerateXmlAndValidate(reverseParser, ddlObject);
-        }
+        //    //GenerateXmlAndValidate(reverseParser, ddlObject);
+        //    GenerateXmlAndValidate(ddlObject);
+        //}
 
         static void GenerateXmlAndValidate(
-            MinsaitReverseParser reverseParser,
-            ItemTransaction ddlObject)
+            MinsaitParser minsaitParser,
+            ItemTransaction ddlObject,
+            Lib.Enums.Enums.DocumentType documentType)
         {
-            System.Console.WriteLine("\n--- Mapping DDL ➜ Minsait XML ---");
+            System.Console.WriteLine("\n--- Mapping DDL -> Minsait XML ---");
 
-            var xml = reverseParser.MapToXml(ddlObject);
+            var xml = minsaitParser.MapToXml(ddlObject, documentType);
 
             // Detectar tipo de documento
             var kind = MinsaitSchemaResolver.Detect(xml);
@@ -187,5 +203,38 @@ namespace MinsaitToDDL.Console
             System.Console.WriteLine("\nPress Enter to continue...");
             System.Console.ReadLine();
         }
+
+        //static void ProcessXmlFromFile(
+        //    MinsaitParser minsaitParser,
+        //    //MinsaitReverseParser reverseParser,
+        //    JsonSerializerSettings serializeOptions)
+        //{
+        //    System.Console.Write("Enter XML file path: ");
+        //    var path = System.Console.ReadLine();
+
+        //    if (!File.Exists(path))
+        //    {
+        //        System.Console.WriteLine("File not found.");
+        //        System.Console.ReadLine();
+        //        return;
+        //    }
+
+        //    var xml = File.ReadAllText(path);
+
+        //    var itemTransaction = minsaitParser.Parse(xml);
+
+        //    var ddlJson = JsonConvert.SerializeObject(
+        //        itemTransaction,
+        //        Formatting.Indented,
+        //        serializeOptions);
+
+        //    System.Console.WriteLine("\n--- DDL JSON ---");
+        //    System.Console.WriteLine(ddlJson);
+
+        //    var ddlObject = JsonConvert.DeserializeObject<ItemTransaction>(ddlJson);
+
+        //    //GenerateXmlAndValidate(reverseParser, ddlObject);
+        //    GenerateXmlAndValidate(ddlObject);
+        //}
     }
 }

@@ -159,6 +159,15 @@ namespace MinsaitToDDL.Console.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;Order&gt;&lt;OrderHeader&gt;&lt;OrderNumber&gt;36685801&lt;/OrderNumber&gt;&lt;OrderDate&gt;2026-01-12T00:00:00&lt;/OrderDate&gt;&lt;DocType&gt;221&lt;/DocType&gt;&lt;OrderType&gt;9&lt;/OrderType&gt;&lt;OrderCurrency&gt;EUR&lt;/OrderCurrency&gt;&lt;OtherOrderDates&gt;&lt;DeliveryDate&gt;2026-01-16T00:00:00&lt;/DeliveryDate&gt;&lt;LastAcceptableDeliveryDate&gt;2026-01-16T00:00:00&lt;/LastAcceptableDeliveryDate&gt;&lt;/OtherOrderDates&gt;&lt;BuyerInformation&gt;&lt;EANCode&gt;5600000025963&lt;/EANCode&gt;&lt;InternalCode&gt;0142&lt;/InternalCode&gt;&lt;Department&gt;183&lt;/Department&gt;&lt;/BuyerInformation&gt;&lt;SellerI [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MinsaitOrderSampleReal {
+            get {
+                return ResourceManager.GetString("MinsaitOrderSampleReal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] OrderIeDocs {

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Order>
+	<OrderHeader>
+		<OrderNumber>36685801</OrderNumber>
+		<OrderDate>2026-01-12T00:00:00</OrderDate>
+		<DocType>221</DocType>
+		<OrderType>9</OrderType>
+		<OrderCurrency>EUR</OrderCurrency>
+		<OtherOrderDates>
+			<DeliveryDate>2026-01-16T00:00:00</DeliveryDate>
+			<LastAcceptableDeliveryDate>2026-01-16T00:00:00</LastAcceptableDeliveryDate>
+		</OtherOrderDates>
+		<BuyerInformation>
+			<EANCode>5600000025963</EANCode>
+			<InternalCode>0142</InternalCode>
+			<Department>183</Department>
+		</BuyerInformation>
+		<SellerInformation>
+			<EANCode>5600012900784</EANCode>
+		</SellerInformation>
+		<DeliveryPlaceInformation>
+			<EANCode>5600000025963</EANCode>
+		</DeliveryPlaceInformation>
+		<BillToPartyInformation>
+			<EANCode>5600000025895</EANCode>
+		</BillToPartyInformation>
+		<PaymentInstructions>
+			<PaymentTerm>30</PaymentTerm>
+		</PaymentInstructions>
+		<InvoiceAllowancesOrCharges />
+		<HeaderTaxes>
+			<HeaderTaxesHeader>
+				<TaxType>VAT</TaxType>
+				<TaxPercent>23.0000</TaxPercent>
+			</HeaderTaxesHeader>
+		</HeaderTaxes>
+		<SpecialConditions>
+			<Conditions>OTONNO-INVIERNO</Conditions>
+		</SpecialConditions>
+		<FreeTexts />
+		<Transmission>
+			<TransDate>2026-01-15T17:16:59</TransDate>
+			<TransNum>SNRF</TransNum>
+			<Sender>GLNSENDER</Sender>
+			<Recipient>GLNRECEIVER</Recipient>
+		</Transmission>
+	</OrderHeader>
+	<OrderDetail>
+		<ItemDetail>
+			<LineItemNum>1</LineItemNum>
+			<StandardPartNumber>5600141187612</StandardPartNumber>
+			<BuyerPartNumber>10300571</BuyerPartNumber>
+			<SellerPartNumber>CHOURICO AOPESO 1 KCHOURICO</SellerPartNumber>
+			<ItemDescriptions>
+				<Description>CHOURI O CARNES AVENIDA 1KG</Description>
+			</ItemDescriptions>
+			<Quantity>
+				<QuantityValue>24</QuantityValue>
+			</Quantity>
+			<PackSize>
+				<Quantity>24</Quantity>
+			</PackSize>
+			<Price>
+				<NetPrice>8</NetPrice>
+				<GrossPrice>8</GrossPrice>
+				<PVP>16.75</PVP>
+				<PriceBasisQuantity>1</PriceBasisQuantity>
+			</Price>
+			<MonetaryAmount>192</MonetaryAmount>
+			<Package>
+				<PackageIdentifier>95602009606467</PackageIdentifier>
+			</Package>
+			<LineAllowancesOrCharges />
+			<LineTaxes />
+			<LineFreeTexts />
+		</ItemDetail>
+		<ItemDetail>
+			<LineItemNum>2</LineItemNum>
+			<StandardPartNumber>5600141187636</StandardPartNumber>
+			<BuyerPartNumber>15501140</BuyerPartNumber>
+			<SellerPartNumber>MORCELA AOPESO 1 KMORCELA DE A</SellerPartNumber>
+			<ItemDescriptions>
+				<Description>MORCELA DE ARROZ CARNES AVENIDA 1KG</Description>
+			</ItemDescriptions>
+			<Quantity>
+				<QuantityValue>24</QuantityValue>
+			</Quantity>
+			<PackSize>
+				<Quantity>24</Quantity>
+			</PackSize>
+			<Price>
+				<NetPrice>4.95</NetPrice>
+				<GrossPrice>4.95</GrossPrice>
+				<PVP>9.95</PVP>
+				<PriceBasisQuantity>1</PriceBasisQuantity>
+			</Price>
+			<MonetaryAmount>118.8</MonetaryAmount>
+			<Package>
+				<PackageIdentifier>95602009606450</PackageIdentifier>
+			</Package>
+			<LineAllowancesOrCharges />
+			<LineTaxes />
+			<LineFreeTexts />
+		</ItemDetail>
+	</OrderDetail>
+	<OrderSummary>
+		<NumberOfLines>2</NumberOfLines>
+		<OrderTotals>
+			<NetValue>310.8</NetValue>
+			<GrossValue>310.8</GrossValue>
+		</OrderTotals>
+	</OrderSummary>
+</Order>

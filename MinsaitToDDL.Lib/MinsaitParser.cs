@@ -35,5 +35,31 @@ namespace MinsaitToDDL.Lib
 
             return parser.Parse(xml);
         }
+
+        public string MapToXml(ItemTransaction transaction, Enums.Enums.DocumentType documentType)
+        {
+            switch (documentType)
+            {
+                case Enums.Enums.DocumentType.INVOICE:
+                    var invoiceParser = _parsers.OfType<MinsaitInvoiceParser>().FirstOrDefault();
+                    if (invoiceParser != null)
+                    {
+                        return invoiceParser.ParseFromDdl(transaction);
+                    }
+                    break;
+                case Enums.Enums.DocumentType.ORDER:
+                    var orderParser = _parsers.OfType<MinsaitOrderParser>().FirstOrDefault();
+                    if (orderParser != null)
+                    {
+                        return orderParser.ParseFromDdl(transaction);
+                    }
+                    break;
+                // Adicione outros casos conforme necessário
+                default:
+                    throw new InvalidOperationException("Unsupported document type: " + documentType);
+            }
+
+            return null;
+        }
     }
 }

@@ -7,5 +7,6 @@ namespace MinsaitToDDL.Lib.Interfaces
     {
         bool CanParse(XElement root);
         ItemTransaction Parse(string xml);
+        string ParseFromDdl(ItemTransaction transaction);
     }
 }

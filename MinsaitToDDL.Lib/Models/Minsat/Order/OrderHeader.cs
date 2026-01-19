@@ -12,10 +12,16 @@ namespace MinsatToDDL.Lib.Models.Minsat.Order
         [XmlElement("OrderDate")]
         public DateTime OrderDate { get; set; }
 
+        [XmlElement("OrderCurrency")]
+        public string OrderCurrency { get; set; } // <-- Add this
+
+        [XmlElement("PaymentInstructions")]
+        public PaymentInstructions PaymentInstructions { get; set; } // <-- Add this
+
         [XmlElement("BuyerInformation")]
-        public Party BuyerInformation { get; set; }
+        public BuyerInformation BuyerInformation { get; set; } // <-- Change type
 
         [XmlElement("SellerInformation")]
-        public Party SellerInformation { get; set; }
+        public SellerInformation SellerInformation { get; set; } // <-- Change type
     }
 }

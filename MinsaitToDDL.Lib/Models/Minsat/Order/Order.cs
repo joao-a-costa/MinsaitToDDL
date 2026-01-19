@@ -10,5 +10,8 @@ namespace MinsatToDDL.Lib.Models.Minsat.Order
 
         [XmlElement("OrderDetail")]
         public OrderDetail OrderDetail { get; set; }
+
+        [XmlElement("OrderSummary")]
+        public OrderSummary OrderSummary { get; set; } // <-- Add this
     }
 }

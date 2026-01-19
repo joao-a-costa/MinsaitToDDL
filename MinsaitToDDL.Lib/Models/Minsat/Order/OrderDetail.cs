@@ -5,7 +5,7 @@ namespace MinsatToDDL.Lib.Models.Minsat.Order
 {
     public class OrderDetail
     {
-        [XmlElement("OrderItemDetail")]
-        public List<OrderItemDetail> Items { get; set; }
+        [XmlElement("ItemDetail")]
+        public List<ItemDetail> ItemDetails { get; set; } // <-- Change type and name
     }
 }

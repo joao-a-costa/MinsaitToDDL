@@ -2,6 +2,7 @@
 using MinsaitToDDL.Lib.Models;
 using MinsaitToDDL.Lib.Models.Minsat.Common;
 using MinsaitToDDL.Lib.Models.Minsat.Invoice;
+using MinsatToDDL.Lib.Models.Minsat.Order;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -75,15 +76,17 @@ namespace MinsaitToDDL.Lib
             return ItemTransaction;
         }
 
-        public static Invoice MapFromDdl(ItemTransaction itemTransaction)
+        #region "Invoice"
+
+        public static Invoice MapInvoiceFromDdl(ItemTransaction itemTransaction)
         {
             var config = MapConfig();
             return config.CreateMapper().Map<Invoice>(itemTransaction);
         }
 
-        public static Invoice MapFromDdlString(string itemTransactionJson)
+        public static Invoice MapInvoiceFromDdlString(string itemTransactionJson)
         {
-            return MapFromDdl(JsonConvert.DeserializeObject<ItemTransaction>(itemTransactionJson));
+            return MapInvoiceFromDdl(JsonConvert.DeserializeObject<ItemTransaction>(itemTransactionJson));
         }
 
         public static string SerializeInvoiceToXml(Invoice invoice)
@@ -96,6 +99,8 @@ namespace MinsaitToDDL.Lib
                 return writer.ToString();
             }
         }
+
+        #region
 
         #endregion
 
@@ -274,7 +279,7 @@ namespace MinsaitToDDL.Lib
                     ItemDescription = d.Description,
 
                     // Quantity
-                    Quantity = new Quantity
+                    Quantity = new Models.Minsat.Common.Quantity
                     {
                         QuantityValue = (decimal)(d.Quantity ?? 0),
                         UnitOfMeasurement = "UN"

@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MinsaitInvoiceMapper.cs" />
     <Compile Remove="Models\BillToEntity.cs" />
     <Compile Remove="Models\BillToParty.cs" />
     <Compile Remove="Models\DiscountSettings.cs" />
@@ -23,6 +24,9 @@
     <Compile Remove="Models\Minsait\PaymentTerms.cs" />
     <Compile Remove="Models\Taxis.cs" />
     <Compile Remove="Models\TransactionID.cs" />
+    <Compile Remove="Parsers\MinsaitInvoiceReverseParser .cs" />
+    <Compile Remove="Parsers\MinsaitOrderReverseParser.cs" />
+    <Compile Remove="Parsers\MinsaitReverseParser.cs" />
   </ItemGroup>
 
   <ItemGroup>

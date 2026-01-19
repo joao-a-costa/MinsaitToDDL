@@ -17,10 +17,11 @@ namespace MinsatToDDL.Lib.Models.Minsat.Order
         [XmlElement("Quantity")]
         public Quantity Quantity { get; set; }
 
-        // Estes dois podem não existir em todos os ORDERS
+        // OPCIONAL — só se existir no Order
         [XmlElement("NetPrice")]
         public decimal? NetPrice { get; set; }
 
+        // OPCIONAL — só se existir no Order
         [XmlElement("NetAmount")]
         public decimal? NetAmount { get; set; }
     }
