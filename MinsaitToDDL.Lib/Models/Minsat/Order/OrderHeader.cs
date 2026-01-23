@@ -36,5 +36,11 @@ namespace MinsatToDDL.Lib.Models.Minsat.Order
 
         [XmlElement("SellerInformation")]
         public PartyOrder SellerInformation { get; set; }
+
+        [XmlElement("DeliveryPlaceInformation")]
+        public PartyOrder DeliveryPlaceInformation { get; set; }
+
+        [XmlElement("BillToPartyInformation")]
+        public PartyOrder BillToPartyInformation { get; set; }
     }
 }

@@ -51,19 +51,10 @@ namespace MinsaitToDDL.Lib.Parsers
                 cfg.CreateMap<Order, ItemTransaction>()
                     .ForMember(d => d.CreateDate,
                         o => o.MapFrom(s => s.OrderHeader.OrderDate))
-                    //.ForMember(d => d.DeferredPaymentDate,
-                    //    o => o.MapFrom(s =>
-                    //        s.OrderHeader.OtherInvoiceDates != null
-                    //            ? s.OrderHeader.OtherInvoiceDates.InvoiceDueDate
-                    //            : (DateTime?)null))
                     .ForMember(d => d.ISignableTransactionTransactionID,
                         o => o.MapFrom(s => s.OrderHeader.OrderNumber))
                     .ForMember(d => d.TotalAmount,
                         o => o.MapFrom(s => s.OrderSummary.OrderTotals.NetValue))
-                    //.ForMember(d => d.TotalTaxAmount,
-                    //    o => o.MapFrom(s => s.OrderSummary.OrderTotals.TotalTaxAmount))
-                    //.ForMember(d => d.TotalTransactionAmount,
-                    //    o => o.MapFrom(s => s.OrderSummary.OrderTotals.TotalAmountPayable))
                     .ForPath(d => d.Party,
                         o => o.MapFrom(s => MapParty(s.OrderHeader.BuyerInformation)))
                     .ForPath(d => d.SupplierParty,
@@ -71,9 +62,6 @@ namespace MinsaitToDDL.Lib.Parsers
                     .ForPath(d => d.Details,
                         o => o.MapFrom(s => MapOrderLines(
                             s.OrderDetail != null ? s.OrderDetail.ItemDetails : null)))
-                    //.ForPath(d => d.Taxes,
-                    //    o => o.MapFrom(s => MapSummaryTaxes(
-                    //        s.OrderSummary.SummaryTaxes)))
                     .ForAllOtherMembers(o => o.Ignore());
                 cfg.CreateMap<ItemTransaction, Order>()
                     .ForPath(d => d.OrderHeader.OrderDate,
@@ -99,9 +87,13 @@ namespace MinsaitToDDL.Lib.Parsers
                     .ForPath(d => d.OrderSummary.OrderTotals.GrossValue,
                         o => o.MapFrom(s => s.TotalAmount))
                     .ForPath(d => d.OrderHeader.BuyerInformation,
-                        o => o.MapFrom(s => MapPartyReverse(s.Party)))
+                        o => o.MapFrom(s => MapPartyReverse(s.Party, s.PartyGLN)))
                     .ForPath(d => d.OrderHeader.SellerInformation,
-                        o => o.MapFrom(s => MapPartyReverse(s.SupplierParty)))
+                        o => o.MapFrom(s => MapPartyReverse(s.SupplierParty, s.LoadPlaceAddress.GLN)))
+                    .ForPath(d => d.OrderHeader.DeliveryPlaceInformation,
+                        o => o.MapFrom(s => MapPartyReverse(s.SupplierParty, s.PartyGLN)))
+                    .ForPath(d => d.OrderHeader.BillToPartyInformation,
+                        o => o.MapFrom(s => MapPartyReverse(s.SupplierParty, s.PartyGLN)))
                     .ForPath(d => d.OrderHeader.HeaderTaxes,
                         o => o.MapFrom(s => MapOrderHeaderTaxesReverse(s.Taxes)))
                     .ForPath(d => d.OrderDetail.ItemDetails,
@@ -160,14 +152,14 @@ namespace MinsaitToDDL.Lib.Parsers
 
         #region "Reverse"
 
-        private static Models.Minsat.Common.PartyOrder MapPartyReverse(Party party)
+        private static Models.Minsat.Common.PartyOrder MapPartyReverse(Party party, string partyGLN)
         {
-            if (party == null) return null;
+            //if (party == null) return null;
 
             return new Models.Minsat.Common.PartyOrder
             {
+                EANCode = partyGLN,
                 // InternalCode = party.PartyID,
-                EANCode = party.GLN,
                 // Department = party.Department
             };
         }

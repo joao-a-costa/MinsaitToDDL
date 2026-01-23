@@ -50,7 +50,7 @@ namespace MinsaitToDDL.Lib.Models
         public bool? SendMail;
 
         [JsonProperty("GLN")]
-        public object GLN;
+        public string GLN;
 
         [JsonProperty("Delivery")]
         public object Delivery;
