@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MinsaitToDDL.Lib.Interfaces;
 using MinsaitToDDL.Lib.Models;
-using MinsatToDDL.Lib.Models.Minsat.Order;
+using MinsatToDDL.Lib.Models.Minsait.Order;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -128,7 +128,7 @@ namespace MinsaitToDDL.Lib.Parsers
 
         #region "Forward"
 
-        private static Party MapParty(Models.Minsat.Common.Party party)
+        private static Party MapParty(Models.Minsait.Common.Party party)
         {
             if (party == null) return null;
 
@@ -182,11 +182,11 @@ namespace MinsaitToDDL.Lib.Parsers
 
         #region "Reverse"
 
-        private static Models.Minsat.Common.Party MapPartyReverse(Party party, string partyGLN)
+        private static Models.Minsait.Common.Party MapPartyReverse(Party party, string partyGLN)
         {
             //if (party == null) return null;
 
-            return new Models.Minsat.Common.Party
+            return new Models.Minsait.Common.Party
             {
                 EANCode = partyGLN,
                 // InternalCode = party.PartyID,
@@ -209,19 +209,19 @@ namespace MinsaitToDDL.Lib.Parsers
                     SellerPartNumber = d.Description,
 
                     ItemDescriptions = d.Description != null
-                        ? new Models.Minsat.Common.ItemDescriptions
+                        ? new Models.Minsait.Common.ItemDescriptions
                         {
                             Description = d.Description
                         }
                         : null,
                     Quantity = d.Quantity != null
-                        ? new Models.Minsat.Common.Quantity
+                        ? new Models.Minsait.Common.Quantity
                         {
                             QuantityValue = (decimal)d.Quantity
                         }
                         : null,
                     Price = d.UnitPrice != null
-                        ? new Models.Minsat.Common.Price
+                        ? new Models.Minsait.Common.Price
                         {
                             NetPrice = (d.UnitPrice != null ? d.UnitPrice.Value : 0),
                             GrossPrice = (d.TaxIncludedPrice != null ? d.TaxIncludedPrice.Value : 0),
@@ -236,18 +236,18 @@ namespace MinsaitToDDL.Lib.Parsers
             return list;
         }
 
-        private static Models.Minsat.Common.HeaderTaxes MapOrderHeaderTaxesReverse(IEnumerable<TaxValue> taxes)
+        private static Models.Minsait.Common.HeaderTaxes MapOrderHeaderTaxesReverse(IEnumerable<TaxValue> taxes)
         {
-            var headerTaxes = new Models.Minsat.Common.HeaderTaxes
+            var headerTaxes = new Models.Minsait.Common.HeaderTaxes
             {
-                HeaderTaxesHeader = new List<Models.Minsat.Common.HeaderTaxesHeader>()
+                HeaderTaxesHeader = new List<Models.Minsait.Common.HeaderTaxesHeader>()
             };
 
             if (taxes == null) return headerTaxes;
 
             foreach (var t in taxes)
             {
-                headerTaxes.HeaderTaxesHeader.Add(new Models.Minsat.Common.HeaderTaxesHeader
+                headerTaxes.HeaderTaxesHeader.Add(new Models.Minsait.Common.HeaderTaxesHeader
                 {
                     TaxPercent = t.TaxRate
                 });

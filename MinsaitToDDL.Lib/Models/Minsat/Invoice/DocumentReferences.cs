@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace MinsaitToDDL.Lib.Models.Minsat.Invoice
+namespace MinsaitToDDL.Lib.Models.Minsait.Invoice
 {
     public class DocumentReferences
     {

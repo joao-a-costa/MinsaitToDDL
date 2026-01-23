@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace MinsaitToDDL.Lib.Models.Minsat.Common
+namespace MinsaitToDDL.Lib.Models.Minsait.Common
 {
     public class HeaderTaxes
     {

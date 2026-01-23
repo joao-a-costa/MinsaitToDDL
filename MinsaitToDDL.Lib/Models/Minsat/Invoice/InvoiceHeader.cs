@@ -1,9 +1,9 @@
-﻿using MinsaitToDDL.Lib.Models.Minsat.Common;
-using MinsaitToDDL.Lib.Models.Minsat.Invoice;
+﻿using MinsaitToDDL.Lib.Models.Minsait.Common;
+using MinsaitToDDL.Lib.Models.Minsait.Invoice;
 using System;
 using System.Xml.Serialization;
 
-namespace MinsaitToDDL.Lib.Models.Minsat.Invoice
+namespace MinsaitToDDL.Lib.Models.Minsait.Invoice
 {
     public class InvoiceHeader
     {

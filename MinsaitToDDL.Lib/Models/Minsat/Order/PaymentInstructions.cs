@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace MinsatToDDL.Lib.Models.Minsat.Order
+namespace MinsatToDDL.Lib.Models.Minsait.Order
 {
     public class PaymentInstructions
     {

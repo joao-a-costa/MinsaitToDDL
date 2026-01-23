@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace MinsaitToDDL.Lib.Models.Minsat.Order
+namespace MinsaitToDDL.Lib.Models.Minsait.Order
 {
     public class OtherOrderDates
     {

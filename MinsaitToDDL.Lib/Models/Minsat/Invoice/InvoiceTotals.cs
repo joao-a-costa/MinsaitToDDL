@@ -1,4 +1,4 @@
-﻿namespace MinsaitToDDL.Lib.Models.Minsat.Invoice
+﻿namespace MinsaitToDDL.Lib.Models.Minsait.Invoice
 {
     using System.Xml.Serialization;
 

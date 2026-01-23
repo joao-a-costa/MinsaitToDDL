@@ -1,7 +1,7 @@
-using MinsaitToDDL.Lib.Models.Minsat.Common;
+using MinsaitToDDL.Lib.Models.Minsait.Common;
 using System.Xml.Serialization;
 
-namespace MinsatToDDL.Lib.Models.Minsat.Order
+namespace MinsatToDDL.Lib.Models.Minsait.Order
 {
     public class ItemDetail
     {
