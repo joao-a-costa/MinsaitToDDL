@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace MinsatToDDL.Lib.Models.Minsat.Order
+namespace MinsaitToDDL.Lib.Models.Minsat.Common
 {
     public class Price
     {

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MinsaitToDDL.Lib.Models.Minsat.Common;
+using MinsaitToDDL.Lib.Models.Minsat.Invoice;
+using System;
 using System.Xml.Serialization;
 
 namespace MinsaitToDDL.Lib.Models.Minsat.Invoice
@@ -11,16 +13,34 @@ namespace MinsaitToDDL.Lib.Models.Minsat.Invoice
         [XmlElement("InvoiceDate")]
         public DateTime InvoiceDate { get; set; }
 
+        //[XmlElement("DocType")]
+        //public string DocType { get; set; } = "221";
+
+        [XmlElement("InvoiceType")]
+        public string InvoiceType { get; set; } = "9";
+
         [XmlElement("InvoiceCurrency")]
-        public string InvoiceCurrency { get; set; }
+        public string InvoiceCurrency { get; set; } = "EUR";
 
         [XmlElement("OtherInvoiceDates")]
         public OtherInvoiceDates OtherInvoiceDates { get; set; }
+
+        //[XmlElement("PaymentInstructions")]
+        //public PaymentInstructions PaymentInstructions { get; set; }
+
+        //[XmlElement(ElementName = "HeaderTaxes")]
+        //public HeaderTaxes HeaderTaxes { get; set; }
 
         [XmlElement("BuyerInformation")]
         public Common.Party BuyerInformation { get; set; }
 
         [XmlElement("SellerInformation")]
         public Common.Party SellerInformation { get; set; }
+
+        //[XmlElement("DeliveryPlaceInformation")]
+        //public Party DeliveryPlaceInformation { get; set; }
+
+        [XmlElement("BillToPartyInformation")]
+        public Party BillToPartyInformation { get; set; }
     }
 }

@@ -32,15 +32,15 @@ namespace MinsatToDDL.Lib.Models.Minsat.Order
         public HeaderTaxes HeaderTaxes { get; set; }
 
         [XmlElement("BuyerInformation")]
-        public PartyOrder BuyerInformation { get; set; }
+        public Party BuyerInformation { get; set; }
 
         [XmlElement("SellerInformation")]
-        public PartyOrder SellerInformation { get; set; }
+        public Party SellerInformation { get; set; }
 
         [XmlElement("DeliveryPlaceInformation")]
-        public PartyOrder DeliveryPlaceInformation { get; set; }
+        public Party DeliveryPlaceInformation { get; set; }
 
         [XmlElement("BillToPartyInformation")]
-        public PartyOrder BillToPartyInformation { get; set; }
+        public Party BillToPartyInformation { get; set; }
     }
 }

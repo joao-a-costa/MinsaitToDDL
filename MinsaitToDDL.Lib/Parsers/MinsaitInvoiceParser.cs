@@ -48,222 +48,211 @@ namespace MinsaitToDDL.Lib.Parsers
         {
             var config = new MapperConfiguration(cfg =>
             {
+                // Invoice → ItemTransaction
                 cfg.CreateMap<Invoice, ItemTransaction>()
                     .ForMember(d => d.CreateDate,
                         o => o.MapFrom(s => s.InvoiceHeader.InvoiceDate))
-                    .ForMember(d => d.DeferredPaymentDate,
-                        o => o.MapFrom(s =>
-                            s.InvoiceHeader.OtherInvoiceDates != null
-                                ? s.InvoiceHeader.OtherInvoiceDates.InvoiceDueDate
-                                : (DateTime?)null))
+                    .ForMember(d => d.ActualDeliveryDate,
+                        o => o.MapFrom(s => s.InvoiceHeader.OtherInvoiceDates != null ? s.InvoiceHeader.OtherInvoiceDates.DeliveryDate : (DateTime?)null))
                     .ForMember(d => d.ISignableTransactionTransactionID,
                         o => o.MapFrom(s => s.InvoiceHeader.InvoiceNumber))
-                    .ForMember(d => d.TotalAmount,
+                    .ForMember(d => d.TotalGrossAmount,
                         o => o.MapFrom(s => s.InvoiceSummary.InvoiceTotals.NetValue))
-                    .ForMember(d => d.TotalTaxAmount,
-                        o => o.MapFrom(s => s.InvoiceSummary.InvoiceTotals.TotalTaxAmount))
-                    .ForMember(d => d.TotalTransactionAmount,
-                        o => o.MapFrom(s => s.InvoiceSummary.InvoiceTotals.TotalAmountPayable))
-                    .ForPath(d => d.Party,
+                    .ForMember(d => d.TotalAmount,
+                        o => o.MapFrom(s => s.InvoiceSummary.InvoiceTotals.GrossValue))
+                    .ForMember(d => d.Party,
                         o => o.MapFrom(s => MapParty(s.InvoiceHeader.BuyerInformation)))
-                    .ForPath(d => d.SupplierParty,
+                    .ForMember(d => d.PartyGLN,
+                    o => o.MapFrom(s => s.InvoiceHeader != null && s.InvoiceHeader.BuyerInformation != null
+                        ? s.InvoiceHeader.BuyerInformation.EANCode
+                        : null))
+                    .ForMember(d => d.SupplierParty,
                         o => o.MapFrom(s => MapParty(s.InvoiceHeader.SellerInformation)))
-                    .ForPath(d => d.Details,
+                    //.ForMember(d => d.LoadPlaceAddress,
+                    //    o => o.MapFrom(s => MapParty(s.InvoiceHeader.DeliveryPlaceInformation)))
+                    .ForMember(d => d.Details,
                         o => o.MapFrom(s => MapInvoiceLines(
-                            s.InvoiceDetail != null ? s.InvoiceDetail.Items : null)))
-                    .ForPath(d => d.Taxes,
-                        o => o.MapFrom(s => MapSummaryTaxes(
-                            s.InvoiceSummary.SummaryTaxes)))
+                            s.InvoiceDetail != null ? s.InvoiceDetail.ItemDetails : null)))
+                    //.ForMember(d => d.Taxes,
+                    //    o => o.MapFrom(s => s.InvoiceHeader != null
+                    //        && s.InvoiceHeader.HeaderTaxes != null
+                    //        && s.InvoiceHeader.HeaderTaxes.HeaderTaxesHeader != null
+                    //        ? s.InvoiceHeader.HeaderTaxes.HeaderTaxesHeader.ConvertAll(
+                    //            h => new TaxValue { TaxRate = h.TaxPercent })
+                    //        : null))
+                    //.ForMember(d => d.Payment,
+                    //    o => o.MapFrom(s => MapPayment(s.InvoiceHeader)))
                     .ForAllOtherMembers(o => o.Ignore());
 
+                // ItemTransaction → Invoice (already present)
                 cfg.CreateMap<ItemTransaction, Invoice>()
-                    .ForAllOtherMembers(o => o.Ignore());
+                    .ForPath(d => d.InvoiceHeader.InvoiceDate,
+                        o => o.MapFrom(s => s.CreateDate))
+                    .ForPath(d => d.InvoiceHeader.OtherInvoiceDates.DeliveryDate,
+                        o => o.MapFrom(s => s.ActualDeliveryDate))
+                    //.ForPath(d => d.InvoiceHeader.OtherInvoiceDates.LastAcceptableDeliveryDate,
+                    //    o => o.MapFrom(s => s.ActualDeliveryDate))
+                    //.ForPath(d => d.InvoiceHeader.DocType,
+                    //    o => o.MapFrom(_ => "221"))
+                    .ForPath(d => d.InvoiceHeader.InvoiceType,
+                        o => o.MapFrom(_ => "90"))
+                    .ForPath(d => d.InvoiceHeader.InvoiceCurrency,
+                        o => o.MapFrom(_ => "EUR"))
+                    //.ForPath(d => d.InvoiceHeader.PaymentInstructions.PaymentTerm,
+                    //    o => o.MapFrom(s => ((int)s.Payment.PaymentDays).ToString()))
+                    .ForPath(d => d.InvoiceHeader.InvoiceNumber,
+                        o => o.MapFrom(s => s.ISignableTransactionTransactionID))
+                    .ForPath(d => d.InvoiceSummary.NumberOfLines,
+                        o => o.MapFrom(s => s.Details.Count))
+                    .ForPath(d => d.InvoiceSummary.InvoiceTotals.NetValue,
+                        o => o.MapFrom(s => s.TotalGrossAmount))
+                    .ForPath(d => d.InvoiceSummary.InvoiceTotals.GrossValue,
+                        o => o.MapFrom(s => s.TotalAmount))
+                    .ForPath(d => d.InvoiceHeader.BuyerInformation,
+                        o => o.MapFrom(s => MapPartyReverse(s.Party, s.PartyGLN)))
+                    .ForPath(d => d.InvoiceHeader.SellerInformation,
+                        o => o.MapFrom(s => MapPartyReverse(s.SupplierParty, s.LoadPlaceAddress.GLN)))
+                    //.ForPath(d => d.InvoiceHeader.DeliveryPlaceInformation,
+                    //    o => o.MapFrom(s => MapPartyReverse(s.SupplierParty, s.PartyGLN)))
+                    .ForPath(d => d.InvoiceHeader.BillToPartyInformation,
+                        o => o.MapFrom(s => MapPartyReverse(s.SupplierParty, s.PartyGLN)))
+                    //.ForPath(d => d.InvoiceHeader.HeaderTaxes,
+                    //    o => o.MapFrom(s => MapInvoiceHeaderTaxesReverse(s.Taxes)))
+                    .ForPath(d => d.InvoiceDetail.ItemDetails,
+                        o => o.MapFrom(s => MapInvoiceLinesReverse(s.Details)));
             });
 
             return config.CreateMapper();
         }
 
-        #region Helpers
+        #region "Forward"
 
         private static Party MapParty(Models.Minsat.Common.Party party)
         {
             if (party == null) return null;
 
-            return new Models.Party
+            return new Party
             {
-                FederalTaxID = party.NIF,
-                OrganizationName = party.Name,
-                AddressLine1 = party.Street,
-                PostalCode = party.PostalCode,
-                CountryID = party.Country
+                GLN = party.EANCode,
+                // Add other mappings if needed
             };
         }
 
-        //private static Party MapPartyReverse(Models.Party party)
-        //{
-        //    if (party == null) return null;
-
-        //    return new MinsaitToDDL.Lib.Models.Minsat.Common.Party
-        //    {
-        //        NIF = party.FederalTaxID,
-        //        Name = party.OrganizationName,
-        //        Street = party.AddressLine1,
-        //        PostalCode = party.PostalCode,
-        //        Country = party.CountryID
-        //    };
-        //}
-
-        //private static UnloadPlaceAddress MapUnloadPlaceAddress(Models.Minsait.Party party)
-        //{
-        //    if (party == null) return null;
-
-        //    return new UnloadPlaceAddress
-        //    {
-        //        AddressLine1 = party.Street,
-        //        PostalCode = party.PostalCode,
-        //        CountryID = party.Country
-        //    };
-        //}
-
-        //private static Models.Minsait.Party MapUnloadPlaceAddressReverse(UnloadPlaceAddress address)
-        //{
-        //    if (address == null) return null;
-
-        //    return new Models.Minsait.Party
-        //    {
-        //        Street = address.AddressLine1,
-        //        PostalCode = address.PostalCode,
-        //        Country = address.CountryID
-        //    };
-        //}
-
-        private static List<Detail> MapInvoiceLines(
-            IEnumerable<InvoiceItemDetail> lines)
+        private static List<Detail> MapInvoiceLines(IEnumerable<ItemDetail> items)
         {
-            var details = new List<Detail>();
-            if (lines == null) return details;
+            var list = new List<Detail>();
+            if (items == null) return list;
 
-            foreach (var line in lines)
+            foreach (var i in items)
             {
-                details.Add(new Detail
+                var detail = new Detail
                 {
-                    ItemID = line.StandardPartNumber,
-                    Description = line.ItemDescription,
-                    Quantity = (double)line.Quantity.QuantityValue,
-                    UnitPrice = line.Quantity.QuantityValue != 0
-                        ? (double)(line.MonetaryAmount / line.Quantity.QuantityValue)
-                        : 0,
-                    TotalNetAmount = (double)line.MonetaryAmount
-                });
+                    LineItemID = i.LineItemNum,
+                    ItemID = i.StandardPartNumber,
+                    //BuyerItemID = i.BuyerPartNumber,
+                    SupplierItemID = i.SellerPartNumber,
+                    Description = i.ItemDescriptions?.Description,
+                    Quantity = (double?)i.Quantity?.QuantityValue,
+                    UnitPrice = i.Price?.NetPrice,
+                    TotalNetAmount = i.MonetaryAmount
+                };
+
+                list.Add(detail);
             }
 
-            return details;
+            return list;
         }
 
-        //private static List<LineItem> MapInvoiceLinesReverse(IEnumerable<Detail> details)
+        //private static Payment MapPayment(InvoiceHeader header)
         //{
-        //    var lines = new List<LineItem>();
-        //    int lineNo = 1;
+        //    if (header == null || header.PaymentInstructions == null)
+        //        return new Payment { PaymentDays = 0 };
 
-        //    if (details == null) return lines;
+        //    int days = 0;
+        //    int.TryParse(header.PaymentInstructions.PaymentTerm, out days);
 
-        //    foreach (var d in details)
+        //    return new Payment
         //    {
-        //        var quantity = (decimal)(d.Quantity ?? 0);
-
-        //        var line = new LineItem
-        //        {
-        //            Number = lineNo++,
-        //            TradeItemIdentification = d.ItemID,
-        //            ItemDescription = d.Description,
-
-        //            Quantity = new Quantity
-        //            {
-        //                QuantityValue = quantity,
-        //                UnitOfMeasurement = "UN" // ou deixa null se não for obrigatório
-        //            },
-
-        //            NetLineAmount = (decimal)(d.TotalNetAmount ?? 0),
-
-        //            // cálculo seguro do preço unitário
-        //            NetPrice = quantity != 0
-        //                ? (decimal)((d.TotalNetAmount ?? 0) / (double)quantity)
-        //                : 0
-        //        };
-
-        //        var taxRate = d.TaxList != null
-        //            ? d.TaxList.FirstOrDefault()?.TaxRate
-        //            : null;
-
-        //        if (taxRate.HasValue)
-        //        {
-        //            line.LineVat = new LineVat
-        //            {
-        //                TaxPercentage = (decimal)taxRate.Value,
-        //                TaxableAmount = (decimal)(d.TotalNetAmount ?? 0),
-        //                TaxTotalValue = (decimal)(d.TotalTaxAmount ?? 0)
-        //            };
-        //        }
-
-        //        lines.Add(line);
-        //    }
-
-        //    return lines;
+        //        PaymentDays = days
+        //    };
         //}
 
-        //private static List<TaxValue> MapTaxValues(IEnumerable<VatSummary> vats)
-        //{
-        //    var list = new List<TaxValue>();
-        //    if (vats == null) return list;
+        #endregion
 
-        //    foreach (var v in vats)
-        //    {
-        //        list.Add(new TaxValue
-        //        {
-        //            TaxRate = (double)v.TaxPercentage,
-        //            TotalTaxAmount = (double)v.TaxTotalValue,
-        //            TotalNetChargeableAmount = (double)v.TaxableAmount
-        //        });
-        //    }
+        #region "Reverse"
 
-        //    return list;
-        //}
-
-        //private static List<VatSummary> MapTaxValuesReverse(IEnumerable<TaxValue> taxes)
-        //{
-        //    var list = new List<VatSummary>();
-        //    if (taxes == null) return list;
-
-        //    foreach (var t in taxes)
-        //    {
-        //        list.Add(new VatSummary
-        //        {
-        //            TaxPercentage = (decimal)t.TaxRate,
-        //            TaxTotalValue = (decimal)t.TotalTaxAmount,
-        //            TaxableAmount = (decimal)t.TotalNetChargeableAmount
-        //        });
-        //    }
-
-        //    return list;
-        //}
-
-        private static List<TaxValue> MapSummaryTaxes(
-            IEnumerable<SummaryTax> taxes)
+        private static Models.Minsat.Common.Party MapPartyReverse(Party party, string partyGLN)
         {
-            var list = new List<TaxValue>();
-            if (taxes == null) return list;
+            //if (party == null) return null;
 
-            foreach (var t in taxes)
+            return new Models.Minsat.Common.Party
             {
-                list.Add(new TaxValue
+                EANCode = partyGLN,
+                // InternalCode = party.PartyID,
+                // Department = party.Department
+            };
+        }
+
+        private static List<ItemDetail> MapInvoiceLinesReverse(IEnumerable<Detail> details)
+        {
+            var list = new List<ItemDetail>();
+            if (details == null) return list;
+
+            foreach (var d in details)
+            {
+                list.Add(new ItemDetail
                 {
-                    TaxRate = (double)t.TaxPercent,
-                    TotalTaxAmount = (double)t.TaxAmount,
-                    TotalNetChargeableAmount = (double)t.TaxableAmount
+                    LineItemNum = (int)(d.LineItemID != null ? d.LineItemID.Value : 0),
+                    StandardPartNumber = d.ItemID,
+                    BuyerPartNumber = d.ItemID,
+                    SellerPartNumber = d.Description,
+
+                    ItemDescriptions = d.Description != null
+                        ? new Models.Minsat.Common.ItemDescriptions
+                        {
+                            Description = d.Description
+                        }
+                        : null,
+                    Quantity = d.Quantity != null
+                        ? new Models.Minsat.Common.Quantity
+                        {
+                            QuantityValue = (decimal)d.Quantity
+                        }
+                        : null,
+                    Price = d.UnitPrice != null
+                        ? new Models.Minsat.Common.Price
+                        {
+                            NetPrice = (d.UnitPrice != null ? d.UnitPrice.Value : 0),
+                            GrossPrice = (d.TaxIncludedPrice != null ? d.TaxIncludedPrice.Value : 0),
+                            PVP = (d.TaxIncludedPrice != null ? d.TaxIncludedPrice.Value : 0),
+                            PriceBasisQuantity = (d.Quantity != null ? d.Quantity.Value : 0),
+                        }
+                        : null,
+                    MonetaryAmount = (d.TotalGrossAmount != null ? d.TotalGrossAmount.Value : 0),
                 });
             }
 
             return list;
+        }
+
+        private static Models.Minsat.Common.HeaderTaxes MapInvoiceHeaderTaxesReverse(IEnumerable<TaxValue> taxes)
+        {
+            var headerTaxes = new Models.Minsat.Common.HeaderTaxes
+            {
+                HeaderTaxesHeader = new List<Models.Minsat.Common.HeaderTaxesHeader>()
+            };
+
+            if (taxes == null) return headerTaxes;
+
+            foreach (var t in taxes)
+            {
+                headerTaxes.HeaderTaxesHeader.Add(new Models.Minsat.Common.HeaderTaxesHeader
+                {
+                    TaxPercent = t.TaxRate
+                });
+            }
+            return headerTaxes;
+
         }
 
         #endregion

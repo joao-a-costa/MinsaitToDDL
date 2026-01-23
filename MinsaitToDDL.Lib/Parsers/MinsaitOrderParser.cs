@@ -128,7 +128,7 @@ namespace MinsaitToDDL.Lib.Parsers
 
         #region "Forward"
 
-        private static Party MapParty(Models.Minsat.Common.PartyOrder party)
+        private static Party MapParty(Models.Minsat.Common.Party party)
         {
             if (party == null) return null;
 
@@ -182,11 +182,11 @@ namespace MinsaitToDDL.Lib.Parsers
 
         #region "Reverse"
 
-        private static Models.Minsat.Common.PartyOrder MapPartyReverse(Party party, string partyGLN)
+        private static Models.Minsat.Common.Party MapPartyReverse(Party party, string partyGLN)
         {
             //if (party == null) return null;
 
-            return new Models.Minsat.Common.PartyOrder
+            return new Models.Minsat.Common.Party
             {
                 EANCode = partyGLN,
                 // InternalCode = party.PartyID,
@@ -209,19 +209,19 @@ namespace MinsaitToDDL.Lib.Parsers
                     SellerPartNumber = d.Description,
 
                     ItemDescriptions = d.Description != null
-                        ? new ItemDescriptions
+                        ? new Models.Minsat.Common.ItemDescriptions
                         {
                             Description = d.Description
                         }
                         : null,
                     Quantity = d.Quantity != null
-                        ? new Quantity
+                        ? new Models.Minsat.Common.Quantity
                         {
                             QuantityValue = (decimal)d.Quantity
                         }
                         : null,
                     Price = d.UnitPrice != null
-                        ? new Price
+                        ? new Models.Minsat.Common.Price
                         {
                             NetPrice = (d.UnitPrice != null ? d.UnitPrice.Value : 0),
                             GrossPrice = (d.TaxIncludedPrice != null ? d.TaxIncludedPrice.Value : 0),

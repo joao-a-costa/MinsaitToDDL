@@ -6,6 +6,9 @@ namespace MinsaitToDDL.Lib.Models.Minsat.Invoice
 {
     public class InvoiceSummary
     {
+        [XmlElement("NumberOfLines")]
+        public int NumberOfLines { get; set; }
+
         [XmlElement("InvoiceTotals")]
         public InvoiceTotals InvoiceTotals { get; set; }
 
